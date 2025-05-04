@@ -31,6 +31,6 @@
     <mappers>
 
         <!--        package做批量注册,项目中优先使用这种方式-->
-<!--        <package name="com.lukai.dao"/>-->
+        <package name="com.lukai.crm.settings.dao"/>
     </mappers>
 </configuration>
