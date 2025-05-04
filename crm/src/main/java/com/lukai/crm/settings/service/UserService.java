@@ -4,5 +4,5 @@ import com.lukai.crm.settings.domain.User;
 
 public interface UserService {
 
-    User login(String loginAct, String loginPwd);
+    User login(String loginAct, String loginPwd, String ip);
 }
