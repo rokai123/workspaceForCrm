@@ -52,7 +52,7 @@ public class UserController extends HttpServlet {
         //ビジネスロジック層では、プロキシクラス形式のインターフェースオブジェクトを統一採用
         UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
         try {
-            User user = us.login(loginAct,loginPwd);
+            User user = us.login(loginAct,loginPwd,ip);
             request.getSession().setAttribute("user", user);
             //程序执行到此处，说明业务层没有为controller抛出任何异常，表示登录成功。
             //プログラムがこの位置まで実行された場合、ビジネスロジック層がControllerに例外を送出していないため、ログインが成功したことを示します。
@@ -67,7 +67,7 @@ public class UserController extends HttpServlet {
             map.put("success",false);
             map.put("msg", msg);
             PrintJson.printJsonObj(response,map);
-            //63集
+
 
 
         }
