@@ -1,9 +1,14 @@
 package com.lukai.crm.web.filter;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
 
 import java.io.IOException;
 
+@WebFilter(
+        filterName = "EncodingFilter",
+        urlPatterns = "*.do"
+)
 public class EncodingFilter implements Filter {
 
 

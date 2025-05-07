@@ -9,6 +9,15 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
+<!--    <filter>-->
+<!--        <filter-name>EncodingFilter</filter-name>-->
+<!--        <filter-class>com.lukai.crm.web.filter.EncodingFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>EncodingFilter</filter-name>-->
+<!--        <url-pattern>*.do</url-pattern>-->
+<!--    </filter-mapping>-->
+
 <!--    <servlet>-->
 <!--        <servlet-name>UserController</servlet-name>-->
 <!--        <servlet-class>com.lukai.crm.settings.web.controller.UserController</servlet-class>-->
