@@ -63,7 +63,7 @@
 				if (data.success){
 					//跳转到工作台的初始页
 					//ワークベンチ（作業台）の初期ページにリダイレクトする
-					window.location.href="workbench/index.html";
+					window.location.href="workbench/index.jsp";
 
 				//如果登录失败
 				//ログイン失敗時の処理
@@ -90,7 +90,7 @@
 			<div class="page-header">
 				<h1>ログイン</h1>
 			</div>
-			<form action="workbench/index.html" class="form-horizontal" role="form">
+			<form action="workbench/index.jsp" class="form-horizontal" role="form">
 				<div class="form-group form-group-lg">
 					<div style="width: 350px;">
 						<input id="loginAct" class="form-control" type="text" placeholder="ユーザー名">
