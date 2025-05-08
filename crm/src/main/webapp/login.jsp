@@ -12,6 +12,11 @@
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script>
 	$(function() {
+
+		if(window.top!=window){
+			window.top.location=window.location;
+		}
+
 		//ページ読み込み完了後、テキストボックスの内容をクリアする
 		$("#loginAct").val("");
 		//ページ読み込み完了後、テキストボックスに自動フォーカスを設定する
