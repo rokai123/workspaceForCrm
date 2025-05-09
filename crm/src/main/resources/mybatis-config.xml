@@ -12,6 +12,7 @@
 
         <!--        批量起别名,自动起别名（类名不区分大小写）-->
         <package name="com.lukai.crm.settings.domain"/>
+        <package name="com.lukai.crm.workbench.domain"/>
 
 
     </typeAliases>
@@ -32,5 +33,6 @@
 
         <!--        package做批量注册,项目中优先使用这种方式-->
         <package name="com.lukai.crm.settings.dao"/>
+        <package name="com.lukai.crm.workbench.dao"/>
     </mappers>
 </configuration>
