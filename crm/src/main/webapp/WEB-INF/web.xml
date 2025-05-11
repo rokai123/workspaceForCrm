@@ -37,4 +37,13 @@
 <!--        <url-pattern>/settings/user/xxx.do</url-pattern>-->
 <!--    </servlet-mapping>-->
 
+<!--    <servlet>-->
+<!--        <servlet-name>ActivityController</servlet-name>-->
+<!--        <servlet-class>com.lukai.crm.workbench.web.controller.ActivityController</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>ActivityController</servlet-name>-->
+<!--        <url-pattern>workbench/activity/xxx.do</url-pattern>-->
+<!--    </servlet-mapping>-->
+
 </web-app>
