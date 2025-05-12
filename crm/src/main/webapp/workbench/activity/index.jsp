@@ -19,7 +19,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function(){
-		
+		$("#addBtn").click(function(){
+
+			$("#createActivityModal").modal("show");
+		})
 		
 		
 	});
@@ -207,7 +210,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+					<!--
+						data-toggle="modal":表示触发该按钮，将要打开一个模态窗口
+						data-target="#createActivityModal"：表示要打开哪个模态窗口，通过#id的形式找到该窗口
+
+						现在是以属性和属性值的方式写在了button元素中，这样做的问题是没有办法对按钮的功能进行扩充。
+					-->
+				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
