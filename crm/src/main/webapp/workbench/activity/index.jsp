@@ -21,7 +21,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	$(function(){
 		$("#addBtn").click(function(){
 
-			$("#createActivityModal").modal("show");
+			// $("#createActivityModal").modal("show");
+			$.ajax({
+				url :"workbench/activity/getUserList.do",
+				type : "get",
+				success : function(data){
+					let html = "<option></option>";
+					//遍历出每一个n，就是每一个user对象
+					$.each(data,function(){
+						html += "<option value='"+this.id+"'>"+this.userName+"</option>";
+					})
+
+					$("#create-marketActivityOwner").html(html);
+
+					$("#createActivityModal").modal("show");
+				}
+			})
 		})
 		
 		

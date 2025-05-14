@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/workbench/activity/xxx.do")
+@WebServlet(urlPatterns = "/workbench/activity/getUserList.do")
 public class ActivityController extends HttpServlet {
 
     @Override
@@ -25,7 +25,7 @@ public class ActivityController extends HttpServlet {
 
         String Path = request.getServletPath();
 
-        if ("/workbench/activity/xxx.do".equals(Path)) {
+        if ("/workbench/activity/getUserList.do".equals(Path)) {
 
 
         }else if ("/workbench/activity/xxx.do".equals(Path)) {
