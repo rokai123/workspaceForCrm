@@ -25,11 +25,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$.ajax({
 				url :"workbench/activity/getUserList.do",
 				type : "get",
+				dataType : "json",
 				success : function(data){
 					let html = "<option></option>";
 					//遍历出每一个n，就是每一个user对象
-					$.each(data,function(){
-						html += "<option value='"+this.id+"'>"+this.userName+"</option>";
+					$.each(data,function(index,user){
+						html += "<option value='"+user.id+"'>"+user.name+"</option>";
+
 					})
 
 					$("#create-marketActivityOwner").html(html);
