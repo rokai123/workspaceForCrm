@@ -20,7 +20,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(function(){
 		$("#addBtn").click(function(){
-
+			
 			// $("#createActivityModal").modal("show");
 			$.ajax({
 				url :"workbench/activity/getUserList.do",
@@ -36,6 +36,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					$("#create-marketActivityOwner").html(html);
 
+					//设置当前登录的用户为默认的创建市场活动所有者
+					$("#create-marketActivityOwner").val("${user.id}");
+
+					//所有者下拉框处理完毕后，展现模态窗口
+					//所有者選択プルダウン処理完了後、モーダルウィンドウを表示する
 					$("#createActivityModal").modal("show");
 				}
 			})
@@ -66,9 +71,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-marketActivityOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+<%--								  <option>zhangsan</option>--%>
+<%--								  <option>lisi</option>--%>
+<%--								  <option>wangwu</option>--%>
 								</select>
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
