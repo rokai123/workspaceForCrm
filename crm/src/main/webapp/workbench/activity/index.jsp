@@ -20,7 +20,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(function(){
 		$("#addBtn").click(function(){
-			
+
+
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
+
+
 			// $("#createActivityModal").modal("show");
 			$.ajax({
 				url :"workbench/activity/getUserList.do",
@@ -34,10 +45,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					})
 
-					$("#create-marketActivityOwner").html(html);
+					$("#create-owner").html(html);
 
 					//设置当前登录的用户为默认的创建市场活动所有者
-					$("#create-marketActivityOwner").val("${user.id}");
+					$("#create-owner").val("${user.id}");
 
 					//所有者下拉框处理完毕后，展现模态窗口
 					//所有者選択プルダウン処理完了後、モーダルウィンドウを表示する
@@ -46,7 +57,43 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			})
 		})
 		
-		
+		//为保存按钮绑定事件，执行添加操作
+		$("#saveBtn").click(function(){
+
+			$.ajax({
+				url :"workbench/activity/save.do",
+				type : "post",
+				dataType : "json",
+				data : {
+
+					"owner" : $.trim($("#create-owner").val()),
+					"name" : $.trim($("#create-name").val()),
+					"startDate" : $.trim($("#create-startDatel").val()),
+					"endDate" : $.trim($("#create-endDate").val()),
+					"cost" : $.trim($("#create-cost").val()),
+					"description" : $.trim($("#create-description").val())
+
+
+				},
+				success : function(data){
+
+					if (data.success){
+						//添加成功后
+						//刷新市场活动信息列表（局部刷新）
+
+						//关闭添加状态的模态窗口
+						$("#createActivityModal").modal("hide");
+
+					}else{
+						alert("新規操作中にエラーが発生しました")
+					}
+
+				}
+
+
+			})
+
+		})
 	});
 	
 </script>
@@ -61,35 +108,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel1">创建市场活动</h4>
+					<h4 class="modal-title" id="myModalLabel1">マーケティングキャンペーン作成</h4>
 				</div>
 				<div class="modal-body">
 				
 					<form class="form-horizontal" role="form">
 					
 						<div class="form-group">
-							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+							<label for="create-owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-marketActivityOwner">
+								<select class="form-control" id="create-owner">
 <%--								  <option>zhangsan</option>--%>
 <%--								  <option>lisi</option>--%>
 <%--								  <option>wangwu</option>--%>
 								</select>
 							</div>
-                            <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+                            <label for="create-name" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="create-marketActivityName">
+                                <input type="text" class="form-control" id="create-name">
                             </div>
 						</div>
 						
 						<div class="form-group">
-							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
+							<label for="create-startDate" class="col-sm-2 control-label">開始日</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-startTime">
+								<input type="text" class="form-control time" id="create-startDate" onkeydown="return false;">
+<%--								HTML5提供了专门的日期和时间输入类型，可以强制用户使用浏览器内置的日期/时间选择器，而不是手动输入
+                                <input type="data" class="form-control" id="create-startTime">--%>
 							</div>
-							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
+							<label for="create-endDate" class="col-sm-2 control-label">終了日</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-endTime">
+								<input type="text" class="form-control time" id="create-endDate" onkeydown="return false;">
 							</div>
 						</div>
                         <div class="form-group">
@@ -100,9 +149,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             </div>
                         </div>
 						<div class="form-group">
-							<label for="create-describe" class="col-sm-2 control-label">描述</label>
+							<label for="create-description" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="create-describe"></textarea>
+								<textarea class="form-control" rows="3" id="create-description"></textarea>
 							</div>
 						</div>
 						
@@ -110,8 +159,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+<%--					data-dismiss="modal"表示关闭模态窗口--%>
+					<button type="button" class="btn btn-default" data-dismiss="modal" style="color: #ac2925">閉じる</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>
@@ -238,7 +288,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						现在是以属性和属性值的方式写在了button元素中，这样做的问题是没有办法对按钮的功能进行扩充。
 					-->
-				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 新規作成</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
