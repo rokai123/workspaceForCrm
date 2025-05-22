@@ -63,7 +63,9 @@ public class ActivityController extends HttpServlet {
         activity.setDescription(description);
 
         ActivityServiceImpl as = (ActivityServiceImpl) ServiceFactory.getService(new ActivityServiceImpl());
-        
+
+        boolean flag = as.save(activity);
+        PrintJson.printJsonFlag(response, flag);
 
     }
 
