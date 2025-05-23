@@ -68,7 +68,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					"owner" : $.trim($("#create-owner").val()),
 					"name" : $.trim($("#create-name").val()),
-					"startDate" : $.trim($("#create-startDatel").val()),
+					"startDate" : $.trim($("#create-startDate").val()),
 					"endDate" : $.trim($("#create-endDate").val()),
 					"cost" : $.trim($("#create-cost").val()),
 					"description" : $.trim($("#create-description").val())

@@ -8,6 +8,7 @@ import com.lukai.crm.utils.MD5Util;
 import com.lukai.crm.utils.PrintJson;
 import com.lukai.crm.utils.ServiceFactory;
 import com.lukai.crm.workbench.domain.Activity;
+import com.lukai.crm.workbench.service.ActivityService;
 import com.lukai.crm.workbench.service.impl.ActivityServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -61,8 +62,10 @@ public class ActivityController extends HttpServlet {
         activity.setEndDate(endDate);
         activity.setCost(cost);
         activity.setDescription(description);
+        activity.setCreateTime(createTime);
+        activity.setCreateBy(createBy);
 
-        ActivityServiceImpl as = (ActivityServiceImpl) ServiceFactory.getService(new ActivityServiceImpl());
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
 
         boolean flag = as.save(activity);
         PrintJson.printJsonFlag(response, flag);
