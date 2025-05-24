@@ -81,6 +81,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						//添加成功后
 						//刷新市场活动信息列表（局部刷新）
 
+						//清空添加模态窗口中的数据
+						//jquery对象转换为dom对象JQuery对象[下标]
+						$("#activityAddForm")[0].reset();
 						//关闭添加状态的模态窗口
 						$("#createActivityModal").modal("hide");
 
@@ -94,25 +97,76 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			})
 
 		})
+
+		//页面加载完毕后触发一个方法
+		//默认展开列表的第一页，每页展现两条记录
+		pageList(1,2);
+
+		//为查询按钮绑定事件。触发pageList方法
+		$("#searchBtn").click(function(){
+			pageList(1,2);
+		})
 	});
-	
+
+	/*
+	* pageNo 页码
+	* pageSize 每页展现的记录数
+	* 我们在哪些情况下需要刷新一下市场活动列表？调用pageList方法
+	* （1）点击左侧菜单的“市场活动”超链接
+	* （2）添加，修改，删除后
+	* （3）点击查询按钮时
+	* （4）点击分页组件的时候
+	* */
+	function pageList(pageNo,pageSize){
+		$.ajax({
+			url:"workbench/activity/pageList.do",
+			type : "get",
+			data: {
+				"pageNo" : pageNo,
+				"pageSize" : pageSize,
+				"name" : $.trim($("#search-name").val()),
+				"owner" : $.trim($("#search-owner").val()),
+				"startDate" : $.trim($("#search-startDate").val()),
+				"endDate" : $.trim($("#search-endDate").val())
+			},
+			dataType : "json",
+			success : function(data){
+				let html = "";
+
+				$.each(data.dataList,function(i,n) {
+					html =+' <tr className="active">';
+					html =+'  	<td><input type="checkbox" value="'+n.id+'"/></td>';
+					html =+'  	<td><a style="text-decoration: none; cursor: pointer;" onClick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';
+					html =+'  	<td>'+n.owner+'</td>';
+					html =+'  	<td>'+n.startDate+'</td>';
+					html =+'  	<td>'+n.endDate+'</td>';
+					html =+'  </tr>';
+				})
+
+				$("#activityBody").html(html);
+
+			}
+
+		})
+	}
+
 </script>
 </head>
 <body>
 
-	<!-- 创建市场活动的模态窗口 -->
-	<div class="modal fade" id="createActivityModal" role="dialog">
-		<div class="modal-dialog" role="document" style="width: 85%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
+<!-- 创建市场活动的模态窗口 -->
+<div class="modal fade" id="createActivityModal" role="dialog">
+	<div class="modal-dialog" role="document" style="width: 85%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span>
 					</button>
 					<h4 class="modal-title" id="myModalLabel1">マーケティングキャンペーン作成</h4>
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form id="activityAddForm" class="form-horizontal" role="form">
 					
 						<div class="form-group">
 							<label for="create-owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -251,14 +305,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text">
+				      <input id="search-name" class="form-control" type="text">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
-				      <input class="form-control" type="text">
+				      <input id="search-owner" class="form-control" type="text">
 				    </div>
 				  </div>
 
@@ -266,18 +320,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input class="form-control" type="text" id="startTime" />
+					  <input id="search-startDate" class="form-control" type="text"/>
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input class="form-control" type="text" id="endTime">
+					  <input id="search-endDate" class="form-control" type="text" id="endTime">
 				    </div>
 				  </div>
 				  
-				  <button type="submit" class="btn btn-default">查询</button>
-				  
+<%--				  <button type="submit" class="btn btn-default">查询</button>--%>
+				  <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+
+
 				</form>
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
@@ -305,21 +361,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>结束日期</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="active">
-							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/activity/detail.jsp';">发传单</a></td>
-                            <td>zhangsan</td>
-							<td>2020-10-10</td>
-							<td>2020-10-20</td>
-						</tr>
-                        <tr class="active">
-                            <td><input type="checkbox" /></td>
-                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">发传单</a></td>
-                            <td>zhangsan</td>
-                            <td>2020-10-10</td>
-                            <td>2020-10-20</td>
-                        </tr>
+					<tbody id="activityBody">
+<%--						<tr class="active">--%>
+<%--							<td><input type="checkbox" /></td>--%>
+<%--							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/activity/detail.jsp';">发传单</a></td>--%>
+<%--                            <td>zhangsan</td>--%>
+<%--							<td>2020-10-10</td>--%>
+<%--							<td>2020-10-20</td>--%>
+<%--						</tr>--%>
+<%--                        <tr class="active">--%>
+<%--                            <td><input type="checkbox" /></td>--%>
+<%--                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">发传单</a></td>--%>
+<%--                            <td>zhangsan</td>--%>
+<%--                            <td>2020-10-10</td>--%>
+<%--                            <td>2020-10-20</td>--%>
+<%--                        </tr>--%>
 					</tbody>
 				</table>
 			</div>

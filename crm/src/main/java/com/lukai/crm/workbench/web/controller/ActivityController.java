@@ -3,10 +3,8 @@ package com.lukai.crm.workbench.web.controller;
 import com.lukai.crm.settings.domain.User;
 import com.lukai.crm.settings.service.UserService;
 import com.lukai.crm.settings.service.impl.UserServiceImpl;
-import com.lukai.crm.utils.DateTimeUtil;
-import com.lukai.crm.utils.MD5Util;
-import com.lukai.crm.utils.PrintJson;
-import com.lukai.crm.utils.ServiceFactory;
+import com.lukai.crm.utils.*;
+import com.lukai.crm.vo.PaginationVO;
 import com.lukai.crm.workbench.domain.Activity;
 import com.lukai.crm.workbench.service.ActivityService;
 import com.lukai.crm.workbench.service.impl.ActivityServiceImpl;
@@ -22,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@WebServlet(urlPatterns = {"/workbench/activity/getUserList.do","/workbench/activity/save.do"})
+@WebServlet(urlPatterns = {"/workbench/activity/getUserList.do","/workbench/activity/save.do",
+        "/workbench/activity/pageList.do"})
 public class ActivityController extends HttpServlet {
 
     @Override
@@ -36,7 +35,41 @@ public class ActivityController extends HttpServlet {
 
         }else if ("/workbench/activity/save.do".equals(Path)) {
             save(request,response);
+        } else if ("/workbench/activity/pageList.do".equals(Path)) {
+            pageList(request,response);
+            
         }
+    }
+
+    private void pageList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到查询市场活动信息列表的操作（结合条件查询+分页查询）");
+
+        String name = request.getParameter("name");
+        String owner = request.getParameter("owner");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String pageNoStr = request.getParameter("pageNo");
+        //将字符串转换为int类型
+        int pageNo = Integer.parseInt(pageNoStr);
+        //每页展现的记录数
+        String pageSizeStr = request.getParameter("pageSize");
+        int pageSize = Integer.parseInt(pageSizeStr);
+        //计算出略过的记录数（总结出的算式）
+        int skipCount = (pageNo-1)*pageSize;
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("name",name);
+        map.put("owner",owner);
+        map.put("startDate",startDate);
+        map.put("endDate",endDate);
+        map.put("pageSize",pageSize);
+        map.put("skipCount",skipCount);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        PaginationVO<Activity> vo = as.pageList(map);
+        PrintJson.printJsonObj(response, vo);
+
+
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {

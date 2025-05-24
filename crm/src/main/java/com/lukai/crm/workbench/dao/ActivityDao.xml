@@ -5,6 +5,18 @@
 
 <mapper namespace="com.lukai.crm.workbench.dao.ActivityDao">
 
+    <select id="getActivityListByCondition" resultType="Activity">
+        select
+            a.id,
+            a.name,
+            u.name as owner,
+            a.startDate,
+            a.endDate
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+    </select>
+
 	<insert id="save">
         insert into tbl_activity(
             id,
