@@ -9,4 +9,6 @@ public interface ActivityDao {
     int save(Activity activity);
 
     List<Activity> getActivityListByCondition(Map<String, Object> map);
+
+    int getTotalByCondition(Map<String, Object> map);
 }
