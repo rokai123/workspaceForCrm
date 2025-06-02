@@ -22,9 +22,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function(){
+
+
+
 		$("#addBtn").click(function(){
-
-
+			// $("#createActivityModal").modal("show");
+			//点击添加按钮后为日期框添加插件
 			$(".time").datetimepicker({
 				minView: "month",
 				language:  'zh-CN',
@@ -33,9 +36,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				todayBtn: true,
 				pickerPosition: "bottom-left"
 			});
-
-
-			// $("#createActivityModal").modal("show");
 			$.ajax({
 				url :"workbench/activity/getUserList.do",
 				type : "get",
@@ -116,7 +116,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			pageList(1,2);
 		})
+
+		//为全选的复选框绑定事件。触发全选操作
+		$("#qx").click(function(){
+			$("input[name=xz]").prop('checked',this.checked);
+		})
+
+		//以下这种做法是不行的
+		/*$("input[name=xz]").click(function () {
+			alert(123);
+		})*/
+		//因为动态生成的元素，是不能够以普通绑定事件的形式来进行操作的
+		/*
+			动态生成的元素，我们要以on方法的形式来触发事件
+			语法：
+				$(需要绑定元素的有效的外层元素).on(绑定事件的方式,需要绑定的元素的jquery对象,回调函数)
+		 */
+		$("#activityBody").on('click',$("input[name=xz]"),function(){
+			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+		})
+
+
 	});
+
+
 
 	/*
 	* pageNo 页码
@@ -151,7 +174,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 				$.each(data.dataList,function(i,n) {
 					html +=' <tr className="active">';
-					html +='  	<td><input type="checkbox" value="'+n.id+'"/></td>';
+					html +='  	<td><input type="checkbox" value="'+n.id+'" name="xz"/></td>';
 					html +='  	<td><a style="text-decoration: none; cursor: pointer;" onClick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';
 					html +='  	<td>'+n.owner+'</td>';
 					html +='  	<td>'+n.startDate+'</td>';
@@ -189,6 +212,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 	}
+
+
 
 </script>
 </head>
@@ -365,13 +390,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input id="search-startDate" class="form-control" type="text"/>
+					  <input id="search-startDate" class="form-control time" type="text"/>
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input id="search-endDate" class="form-control" type="text" id="endTime">
+					  <input id="search-endDate" class="form-control time" type="text" id="endTime">
 				    </div>
 				  </div>
 				  
@@ -399,7 +424,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input type="checkbox" id="qx" /></td>
 							<td>名称</td>
                             <td>所有者</td>
 							<td>开始日期</td>
