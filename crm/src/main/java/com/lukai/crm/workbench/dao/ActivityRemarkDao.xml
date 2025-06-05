@@ -5,6 +5,25 @@
 
 <mapper namespace="com.lukai.crm.workbench.dao.ActivityRemarkDao">
 
+    <delete id="deleteByAids">
+        delete
+        from tbl_activity_remark
+        where activityId in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+
+
+    </delete>
+
+<!--    根据aid查询出需要删除的市场活动备注有几条-->
+    <select id="getCountByAids" resultType="int" >
+        select count(*) from tbl_activity_remark
+        where activityId in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+    </select>
     
 
 </mapper>

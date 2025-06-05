@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @WebServlet(urlPatterns = {"/workbench/activity/getUserList.do","/workbench/activity/save.do",
-        "/workbench/activity/pageList.do"})
+        "/workbench/activity/pageList.do","/workbench/activity/delete.do"})
 public class ActivityController extends HttpServlet {
 
     @Override
@@ -35,10 +35,23 @@ public class ActivityController extends HttpServlet {
 
         }else if ("/workbench/activity/save.do".equals(Path)) {
             save(request,response);
-        } else if ("/workbench/activity/pageList.do".equals(Path)) {
+        }else if ("/workbench/activity/pageList.do".equals(Path)) {
             pageList(request,response);
             
+        } else if ("/workbench/activity/delete.do".equals(Path)) {
+            delete(request,response);
+
         }
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行市场活动的删除操作");
+        String[] ids = request.getParameterValues("id");
+        ActivityService activityService = (ActivityService)ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = activityService.delete(ids);
+
+        PrintJson.printJsonFlag(response, flag);
+
     }
 
     private void pageList(HttpServletRequest request, HttpServletResponse response) {

@@ -5,6 +5,14 @@
 
 <mapper namespace="com.lukai.crm.workbench.dao.ActivityDao">
 
+    <delete id="delete">
+        delete from tbl_activity
+        where id in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+    </delete>
+
     <select id="getTotalByCondition" resultType="int">
         select count(*) from tbl_activity a
         join tbl_user u
