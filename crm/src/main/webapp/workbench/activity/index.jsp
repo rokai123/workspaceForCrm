@@ -142,42 +142,48 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			let $xz = $("input[name=xz]:checked");
 
 			if($xz.length==0){
-				alert("请选择想要删除的对象")
+				alert("削除したい項目を選択してください")
 
 			//选了的情况下有可能是一条，也有可能是多条
 			}else {
-				//url:workbench/activity/delete.do?id=xxx&id=xxx&id=xxx
-				//拼接参数
-				let param = "";
-				for(let i=0;i<$xz.length;i++){
 
-					param +="id="+$($xz[i]).val();
+				if (confirm("選択中のデータを削除してもよろしいですか？")){
 
-					//如果不是最后一个元素，需要在后面追加&符
-					if (i<$xz.length-1){
-						param += "&";
+					//url:workbench/activity/delete.do?id=xxx&id=xxx&id=xxx
+					//拼接参数
+					let param = "";
+					for(let i=0;i<$xz.length;i++){
+
+						param +="id="+$($xz[i]).val();
+
+						//如果不是最后一个元素，需要在后面追加&符
+						if (i<$xz.length-1){
+							param += "&";
+						}
+
 					}
 
+					$.ajax({
+						url :"workbench/activity/delete.do",
+						type : "post",
+						dataType : "json",
+						data : param,
+						success : function(data){
+							/*
+                            data
+                                {"success":true/false}
+                             */
+							if(data.success){
+								//删除成功后调用分页方法刷新模块,回到第一页，每页展现2条信息
+								pageList(1,2);
+							}else{
+								alert("删除失败")
+							}
+						}
+					})
 				}
 
-				$.ajax({
-					url :"workbench/activity/delete.do",
-					type : "post",
-					dataType : "json",
-					data : param,
-					success : function(data){
-						/*
-						data
-							{"success":true/false}
-						 */
-						if(data.success){
-							//删除成功后调用分页方法刷新模块,回到第一页，每页展现2条信息
-							pageList(1,2);
-						}else{
-							alert("删除失败")
-						}
-					}
-				})
+
 
 
 			}
@@ -467,7 +473,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					-->
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 新規作成</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span>削除</button>
 				</div>
 				
 			</div>
